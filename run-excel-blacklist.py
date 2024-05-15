@@ -1,15 +1,40 @@
+import openpyxl.workbook
 import pandas as pd
 import os
 import fnmatch
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
-from openpyxl import Workbook
+from openpyxl.worksheet.table import Table, TableStyleInfo
+import openpyxl
 
 def match_with_wildcards(word, blacklist):
     for pattern in blacklist:
         if fnmatch.fnmatchcase(word, pattern):
             return True
     return False
+
+def make_into_list(file):
+    try:
+        # Arbeitsmappe öffnen und Blatt auswählen
+        wb = openpyxl.load_workbook(f'output/filtered_{file}')
+        sheet = wb['Sheet']
+        
+
+        # Tabelle definieren
+        tab = Table(displayName="Table1", ref=sheet.calculate_dimension())
+
+        # Standardstil zur Tabelle hinzufügen
+        style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False, showLastColumn=False, showRowStripes=True, showColumnStripes=True)
+        tab.tableStyleInfo = style
+
+        # Tabelle zum Blatt hinzufügen
+        sheet.add_table(tab)
+
+        # Arbeitsmappe speichern
+        wb.save(f'output/filtered_{file}')
+            
+    except Exception as e:
+        print(f"Fehler: Konnte keine Tabelle zur Datei {f'output/filtered_{file}'} hinzufügen. {str(e)}")
 
 def auto_adjust_columns(workbook):
     for worksheet in workbook.worksheets:
@@ -34,8 +59,9 @@ blacklist_files = os.listdir('blacklists')
 blacklist = {}
 for file in blacklist_files:
     if file.endswith('.txt'):
-        with open(f'blacklists/{file}', 'r') as f:
+        with open(f'blacklists/{file}', 'r', encoding='utf-8') as f:
             blacklist[file[:-4]] = f.read().splitlines()
+
 
 # Get list of all Excel files in the input directory
 input_files = os.listdir('input')
@@ -58,9 +84,10 @@ for file in input_files:
                 print(f'Column {column} not found in file {file}. Ignoring this column.')
 
         # Write the filtered data to a new Excel file in the output directory
-        wb = Workbook()
+        wb = openpyxl.Workbook()
         ws = wb.active
         for r in dataframe_to_rows(df, index=False, header=True):
             ws.append(r)
         auto_adjust_columns(wb)
         wb.save(f'output/filtered_{file}')
+        make_into_list(file)
