@@ -4,7 +4,7 @@ This Python script is designed to filter Excel files based on a set of blacklist
 
 ## Prerequisites
 
-- Python (This script was written in Python 3.8. Please ensure that your Python version is compatible.)
+- Python (This script was written in Python 3.11.2 Please ensure that your Python version is compatible.)
 - Python libraries: pandas, os, fnmatch, openpyxl
 
 ## How to use
@@ -20,4 +20,4 @@ This Python script is designed to filter Excel files based on a set of blacklist
 - The script reads the blacklist files from the 'blacklists' directory and stores the blacklisted words in a dictionary.
 - The script reads each Excel file from the 'input' directory, filters the specified columns, and writes the filtered data to a new Excel file in the 'output' directory.
 
-Please note that the script does not handle special characters like 'ä', 'ö', 'ü' due to the default encoding in Python. To handle these characters, you should set the encoding to 'utf-8' when reading and writing files. This is already done in the script.
+~~Please note that the script does not handle special characters like 'ä', 'ö', 'ü' due to the default encoding in Python. To handle these characters, you should set the encoding to 'utf-8' when reading and writing files. This is already done in the script.~~ -> It can handle 'utf-8' now!
