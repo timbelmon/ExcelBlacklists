@@ -19,5 +19,6 @@ This Python script is designed to filter Excel files based on a set of blacklist
 - The `auto_adjust_columns` function adjusts the width of each column in the Excel file based on the maximum length of the data in that column.
 - The script reads the blacklist files from the 'blacklists' directory and stores the blacklisted words in a dictionary.
 - The script reads each Excel file from the 'input' directory, filters the specified columns, and writes the filtered data to a new Excel file in the 'output' directory.
+- The max amount of Excel rows tested was about 30k. -> Works but took about 1 minute to filter.
 
 ~~Please note that the script does not handle special characters like 'ä', 'ö', 'ü' due to the default encoding in Python. To handle these characters, you should set the encoding to 'utf-8' when reading and writing files. This is already done in the script.~~ -> It can handle 'utf-8' now!
